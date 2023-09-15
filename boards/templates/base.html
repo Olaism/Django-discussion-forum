@@ -14,9 +14,14 @@
     <title>{% block title %}Django Boards{% endblock title %}</title>
 </head>
 <body>
+    <nav class="navbar bg-dark border-bottom border-body mb-3" data-bs-theme="dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'home' %}">Django Boards</a>
+        </div>
+    </nav>
     <div class="container">
         <nav aria-label="breadcrumb">
-          <ol class="breadcrumb">
+          <ol class="breadcrumb bg-secondary text-light p-2">
               {% block breadcrumb %}
               {% endblock breadcrumb %}
           </ol>
