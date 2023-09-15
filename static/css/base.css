@@ -1,0 +1,25 @@
+body {
+    font-family: 'Mooli', sans-serif;
+    line-height: 1.4;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: 'Lato', sans-serif;
+}
+
+.table td {
+    text-align: center;
+}
+
+.table td:first-child {
+    text-align: left;
+}
+
+.table a {
+    all: unset;
+}
