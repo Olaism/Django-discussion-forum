@@ -11,4 +11,29 @@
 {% endblock breadcrumb %}
 
 {% block content %}
+    <div class='mb-4'>
+        <a href="{% url 'new_topic' board.pk %}" class="btn btn-primary btn-sm">New Topic</a>
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Topic</th>
+                <th scope="col">Starter</th>
+                <th scope="col">Replies</th>
+                <th scope="col">Views</th>
+                <th scope="col">Last Update</th>
+            </tr>
+        </thead>
+    {% for topic in board.topics.all %}
+        <tr>
+            <td scope="row">
+                <a href="#">{{ topic.subject }}</a>
+            </td>
+            <td>{{ topic.starter.username }}</td>
+            <td>0</td>
+            <td>0</td>
+            <td>{{ topic.last_updated }}</td>
+        </tr>
+    {% endfor %}
+    </table>
 {% endblock content %}
