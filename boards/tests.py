@@ -1,6 +1,7 @@
 from django.urls import resolve, reverse
 from django.test import TestCase
 
+from .forms import NewTopicForm
 from .models import Board, Topic, Post
 from .views import home, board_topics, new_topic
 
@@ -67,6 +68,15 @@ class NewTopicTests(TestCase):
         
     def test_csrf(self):
         self.assertContains(self.response, 'csrfmiddlewaretoken')
+        
+    def test_contains_appropiate_form(self):
+        form = self.response.context.get('form')
+        self.assertIsInstance(form, NewTopicForm)
+        
+    def test_contains_neccessary_fields(self):
+        self.assertContains(self.response, '<input type="text"')
+        self.assertContains(self.response, "<textarea")
+        self.assertContains(self.response, '<input type="submit"')
 
     def test_new_topic_contain_link_back_to_neccessary_page(self):
         home_url = reverse('home')
@@ -88,7 +98,9 @@ class NewTopicPostTest(TestCase):
 
     def test_new_topic_invalid_post_data(self):
         response = self.client.post(self.url, {})
+        form = response.context.get('form')
         self.assertEquals(response.status_code, 200)
+        self.assertTrue(form.errors)
 
     def test_new_topic_invalid_post_data_empty_fields(self):
         response = self.client.post(self.url, {'subject': '', 'message': ''})
