@@ -17,8 +17,8 @@
                 <div class="card-body">
                     <form method="POST" novalidate>
                         {% csrf_token %}
-                        {{ form.as_p }}
-                        <input type="submit" value="Submit" class="btn btn-success btn-sm" />
+                        {% include 'common/forms.html' %}
+                        <input type="submit" value="Post" class="btn btn-success btn-sm" />
                     </form>
                 </div>
             </div>
