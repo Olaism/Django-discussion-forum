@@ -1,9 +1,9 @@
 from django.urls import resolve, reverse
 from django.test import TestCase
 
-from .forms import NewTopicForm
-from .models import Board, Topic, Post
-from .views import home, board_topics, new_topic
+from ..forms import NewTopicForm
+from ..models import Board, Topic, Post
+from ..views import home, board_topics, new_topic
 
 class HomeTests(TestCase):
     def setUp(self):

@@ -2,8 +2,8 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import resolve, reverse
 
-from .forms import SignupForm
-from .views import signup
+from ..forms import SignupForm
+from ..views import signup
 
 User = get_user_model()
 
@@ -25,6 +25,12 @@ class SignUpTests(TestCase):
     def test_views_contain_form(self):
         form = self.response.context.get('form')
         self.assertIsInstance(form, SignupForm)
+        
+    def test_form_has_fields(self):
+        form = SignupForm()
+        expected = ['username', 'email', 'password1', 'password2']
+        actual = list(form.fields)
+        self.assertSequenceEqual(expected, actual)
         
     def test_form_inputs(self):
         self.assertContains(self.response, '<input', 5)

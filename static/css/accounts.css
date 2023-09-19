@@ -1,0 +1,16 @@
+body {
+    background-image: url('../img/triangles_pattern.png');
+}
+
+.logo {
+    font-family: 'Roboto Slab', serif;
+}
+
+.logo a{
+    color: rgb(0,0,0,.9)
+}
+    
+.logo a:hover,
+.logo a:active {
+    text-decoration: none;
+}
