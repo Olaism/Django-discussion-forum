@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/accounts.css' %}" />
+{% endblock extra_css %}
+
+{% block body %}
+    <div class="container">
+        <h1 class="text-center logo my-3">
+            <a href="{% url 'home' %}">Django Boards</a>
+        </h1>
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-10 col-sm-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-title text-center border-bottom mb-3 pb-3">
+                            {% block account_title %}{% endblock account_title %}
+                        </div>
+                        <form method="post" novalidate>
+                            {% csrf_token %}
+                            {% include 'common/forms.html' %}
+                            <button class="btn btn-primary btn-sm">{% block account_btn %}{% endblock account_btn %}</button>
+                        </form>
+                    </div>
+                    {% block account_footer %}{% endblock account_footer %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock body %}

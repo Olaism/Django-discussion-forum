@@ -4,6 +4,9 @@ from django.contrib.auth import login as auth_login
 from .forms import SignupForm
 
 def signup(request):
+    if request.user.is_authenticated:
+        redirect('home')
+        
     if request.method == 'POST':
         form = SignupForm(request.POST)
         if form.is_valid():

@@ -1,19 +1,19 @@
 {% extends 'base_accounts.html' %}
 
 {% block title %}
-    {{ block.super }} - Sign up now
+    {{ block.super }} - log in
 {% endblock title %}
 
 {% block account_title %}
-    Sign up
+    Log in
 {% endblock account_title %}
 
 {% block account_btn %}
-    Sign up
+    Log in
 {% endblock account_btn %}
 
 {% block account_footer %}
     <div class="card-footer text-muted text-center">
-    Already have an account? <a href="{% url 'login' %}">Log in</a>
+    New to Django Boards? <a href="{% url 'signup' %}">Sign up</a>
     </div>
 {% endblock account_footer %}
