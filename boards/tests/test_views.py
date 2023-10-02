@@ -1,9 +1,12 @@
 from django.urls import resolve, reverse
 from django.test import TestCase
+from django.contrib.auth import get_user_model
 
 from ..forms import NewTopicForm
 from ..models import Board, Topic, Post
 from ..views import home, board_topics, new_topic
+
+User = get_user_model()
 
 class HomeTests(TestCase):
     def setUp(self):
@@ -89,10 +92,12 @@ class NewTopicPostTest(TestCase):
     def setUp(self):
         self.board = Board.objects.create(name="test", description="test case")
         self.url = reverse('new_topic', kwargs={'pk': self.board.pk})
+        User.objects.create_user(username='testuser', email='testuser@gmail.com', password='testpassword')
+        self.client.login(username='testuser', password='testpassword')
 
     def test_new_topic_valid_post_data(self):
         response = self.client.post(self.url, {'subject': 'Test title', 'message': 'Lorem ipsum dolor sit amet'})
-        self.assertRedirects(self.response, reverse('board_topics', args=(self.board.pk,)))
+        self.assertRedirects(response, reverse('board_topics', args=(self.board.pk,)))
         self.assertTrue(Topic.objects.exists())
         self.assertTrue(Post.objects.exists())
 
