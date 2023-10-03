@@ -11,6 +11,7 @@
         <h1 class="text-center logo my-3">
             <a href="{% url 'home' %}">Django Boards</a>
         </h1>
+        {% block content %}
         <div class="row justify-content-center">
             <div class="col-lg-8 col-md-10 col-sm-12">
                 <div class="card">
@@ -28,5 +29,6 @@
                 </div>
             </div>
         </div>
+        {% endblock content %}
     </div>
 {% endblock body %}
