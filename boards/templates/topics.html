@@ -27,7 +27,7 @@
     {% for topic in board.topics.all %}
         <tr>
             <td scope="row">
-                <a href="#">{{ topic.subject }}</a>
+                <a href="{{ topic.get_absolute_url }}">{{ topic.subject }}</a>
             </td>
             <td>{{ topic.starter.username }}</td>
             <td>0</td>

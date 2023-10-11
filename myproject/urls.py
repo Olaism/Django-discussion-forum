@@ -12,6 +12,7 @@ urlpatterns = [
     path('accounts/login/', auth_views.LoginView.as_view(template_name="login.html"), name='login'),
     path('boards/<int:pk>/', board_views.board_topics, name='board_topics'),
     path('boards/<int:pk>/new/', board_views.new_topic, name='new_topic'),
+    path('boards/<int:pk>/topics/<int:topic_pk>/', board_views.topic_posts, name='topic_posts'),
     path('password/change/', auth_views.PasswordChangeView.as_view(template_name="password_change.html"), name='password_change'),
     path('password/change/done/', auth_views.PasswordChangeDoneView.as_view(template_name="password_change_done.html"), name="password_change_done"),
     path('password/reset/', include([

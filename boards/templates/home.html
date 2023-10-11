@@ -22,7 +22,7 @@
     {% for board in boards %}
         <tr>
             <td scope="row">
-                <a href="{% url 'board_topics' board.pk %}">{{ board.name }}</a> <br />
+                <a href="{{ board.get_absolute_url }}">{{ board.name }}</a> <br />
                 <small class="text-muted">{{ board.description }}</small>
             </td>
             <td>0</td>

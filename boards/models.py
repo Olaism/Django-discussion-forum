@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.urls import reverse
 
 class Board(models.Model):
     name = models.CharField(max_length=30)
@@ -7,6 +7,9 @@ class Board(models.Model):
     
     def __str__(self):
         return self.name
+        
+    def get_absolute_url(self):
+        return reverse('board_topics', kwargs={'pk': self.pk})
     
 class Topic(models.Model):
     subject = models.CharField(max_length=255)
@@ -16,6 +19,9 @@ class Topic(models.Model):
     
     def __str__(self):
         return f"{self.pk} - {self.subject}"
+        
+    def get_absolute_url(self):
+        return reverse('topic_posts', kwargs={'pk': self.board.pk, 'topic_pk': self.pk})
     
     
 class Post(models.Model):
