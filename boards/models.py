@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from django.utils.text import Truncator
 
 class Board(models.Model):
     name = models.CharField(max_length=30)
@@ -10,12 +11,19 @@ class Board(models.Model):
         
     def get_absolute_url(self):
         return reverse('board_topics', kwargs={'pk': self.pk})
+        
+    def get_posts_count(self):
+        return Post.objects.filter(topic__board=self).count()
+
+    def get_last_post(self):
+        return Post.objects.filter(topic__board=self).order_by('-created_at').last()
     
 class Topic(models.Model):
     subject = models.CharField(max_length=255)
     last_updated = models.DateTimeField(auto_now_add=True)
     board = models.ForeignKey(Board, on_delete=models.CASCADE, related_name='topics')
     starter = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='topics')
+    views = models.PositiveIntegerField(default=0)
     
     def __str__(self):
         return f"{self.pk} - {self.subject}"
@@ -33,7 +41,8 @@ class Post(models.Model):
     updated_by = models.ForeignKey('auth.User',  null=True, on_delete=models.SET_NULL, related_name='+')
     
     def __str__(self):
-        return self.message[:30]
+        truncated_msg = Truncator(self.message)
+        return truncated_msg.chars(30)
     
     
     

@@ -26,7 +26,8 @@ class TopicPostsTests(TestCase):
         self.assertEqual(view.func, topic_posts)
         
     def test_view_contains_reply_link(self):
-        pass
+        reply_url = reverse('reply_topic', kwargs={'pk': self.board.pk, 'topic_pk': self.topic.pk})
+        self.assertContains(self.response, reply_url)
 
     def test_view_contains_edit_link(self):
         pass
