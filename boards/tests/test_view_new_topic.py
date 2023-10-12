@@ -66,7 +66,8 @@ class NewTopicPostTest(TestCase):
 
     def test_new_topic_valid_post_data(self):
         response = self.client.post(self.url, {'subject': 'Test title', 'message': 'Lorem ipsum dolor sit amet'})
-        self.assertRedirects(response, reverse('board_topics', args=(self.board.pk,)))
+        topic = Topic.objects.last()
+        self.assertRedirects(response, reverse('topic_posts', args=(self.board.pk, topic.pk)))
         self.assertTrue(Topic.objects.exists())
         self.assertTrue(Post.objects.exists())
 
