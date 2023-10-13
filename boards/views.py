@@ -6,17 +6,17 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.utils.decorators import method_decorator
-from django.views.generic import UpdateView
+from django.views.generic import ListView, UpdateView
 
 from .forms import NewTopicForm, PostForm
 from .models import Board, Topic, Post
 
 User = get_user_model()
 
-def home(request):
-    boards = Board.objects.all()
-    
-    return render(request, 'home.html', {'boards': boards})
+class BoardListView(ListView):
+    template_name = 'home.html'
+    model = Board
+    context_object_name = 'boards'
 
 def board_topics(request, pk):
     board = get_object_or_404(Board, pk=pk)
