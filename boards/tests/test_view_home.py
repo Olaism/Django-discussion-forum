@@ -1,22 +1,22 @@
 from django.urls import resolve, reverse
+from django.views.generic import RedirectView
 from django.test import TestCase
-
-from ..models import Board
-from ..views import home
 
 class HomeTests(TestCase):
     def setUp(self):
-        self.board = Board.objects.create(name='Example', description='All about testing')
         url = reverse('home')
         self.response = self.client.get(url)
         
     def test_home_view_status_code(self):
-        self.assertEquals(self.response.status_code, 200)
+        self.assertEquals(self.response.status_code, 302)
         
     def test_home_url_resolves_home_view(self):
         view = resolve('/')
-        self.assertEquals(view.func, home)
+        self.assertEquals(view.func.view_class, RedirectView)
         
-    def test_home_view_contains_link_to_topics_page(self):
-        board_topics_url = reverse('board_topics', kwargs={'pk': self.board.pk})
-        self.assertContains(self.response, 'href="{0}"'.format(board_topics_url))
+    def test_home_view_redirect_to_board_home_view(self):
+        self.assertRedirects(self.response, '/boards/')
+    
+    
+    
+    

@@ -1,19 +1,16 @@
 from django.contrib import admin
 from django.urls import path, re_path, include
 from django.contrib.auth import views as auth_views
+from django.views.generic import RedirectView
 
 from accounts import views as account_views
-from boards import views as board_views
 
 urlpatterns = [
-    re_path('^$', board_views.home, name='home'),
+    path('', RedirectView.as_view(url='/boards/'), name='home'),
+    path('boards/', include('boards.urls')),
     path('accounts/signup/', account_views.signup, name='signup'),
     path('accounts/logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('accounts/login/', auth_views.LoginView.as_view(template_name="login.html"), name='login'),
-    path('boards/<int:pk>/', board_views.board_topics, name='board_topics'),
-    path('boards/<int:pk>/new/', board_views.new_topic, name='new_topic'),
-    path('boards/<int:pk>/topics/<int:topic_pk>/', board_views.topic_posts, name='topic_posts'),
-    path('boards/<int:pk>/topics/<int:topic_pk>/reply/', board_views.reply_topic, name="reply_topic"),
     path('password/change/', auth_views.PasswordChangeView.as_view(template_name="password_change.html"), name='password_change'),
     path('password/change/done/', auth_views.PasswordChangeDoneView.as_view(template_name="password_change_done.html"), name="password_change_done"),
     path('password/reset/', include([
