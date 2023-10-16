@@ -2,7 +2,7 @@ from django.urls import resolve, reverse
 from django.test import TestCase
 
 from ..models import Board
-from ..views import board_topics
+from ..views import TopicListView
 
 class BoardTopicsTests(TestCase):
     def setUp(self):
@@ -20,7 +20,7 @@ class BoardTopicsTests(TestCase):
     
     def test_board_topics_view_resolve_correct_url(self):
         view = resolve(f'/boards/{self.board.pk}/')
-        self.assertEquals(view.func, board_topics)
+        self.assertEquals(view.func.view_class, TopicListView)
         
     def test_board_topics_contain_link_back_to_neccessary_page(self):
         home_url = reverse('home')

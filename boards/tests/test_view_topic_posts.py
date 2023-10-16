@@ -3,7 +3,7 @@ from django.urls import reverse, resolve
 from django.test import TestCase
 
 from ..models import Board, Topic, Post
-from ..views import topic_posts
+from ..views import PostListView
 
 User = get_user_model()
 
@@ -23,7 +23,7 @@ class TopicPostsTests(TestCase):
 
     def test_view_function(self):
         view = resolve(f"/boards/{self.board.pk}/topics/{self.topic.pk}/")
-        self.assertEqual(view.func, topic_posts)
+        self.assertEqual(view.func.view_class, PostListView)
         
     def test_view_contains_reply_link(self):
         reply_url = reverse('reply_topic', kwargs={'pk': self.board.pk, 'topic_pk': self.topic.pk})

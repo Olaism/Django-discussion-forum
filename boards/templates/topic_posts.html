@@ -47,7 +47,7 @@
                     </div>
                 </div>
             </div>
-        <div>
+        </div>
     {% endfor %}
-    
+    {% include 'common/pagination.html' with object=page_obj %}
 {% endblock content %}

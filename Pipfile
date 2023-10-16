@@ -6,6 +6,8 @@ name = "pypi"
 [packages]
 django = "~=3.2"
 django-widget-tweaks = "*"
+django-environ = "*"
+psycopg2 = "*"
 
 [dev-packages]
 
