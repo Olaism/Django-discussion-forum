@@ -1,6 +1,9 @@
 from django.db import models
 from django.urls import reverse
+from django.utils.html import mark_safe
 from django.utils.text import Truncator
+
+from markdown import markdown
 
 class Board(models.Model):
     name = models.CharField(max_length=30)
@@ -44,7 +47,8 @@ class Post(models.Model):
         truncated_msg = Truncator(self.message)
         return truncated_msg.chars(30)
     
-    
+    def get_message_as_markdown(self):
+        return mark_safe(markdown(self.message, safe_mode='escape'))
     
     
     

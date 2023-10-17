@@ -1,12 +1,13 @@
 from django.db.models import Count
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import UserPassesTestMixin
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse_lazy
 from django.utils import timezone
 from django.utils.decorators import method_decorator
-from django.views.generic import ListView, UpdateView
+from django.views.generic import ListView, CreateView, UpdateView
 
 from .forms import NewTopicForm, PostForm
 from .models import Board, Topic, Post
@@ -31,7 +32,16 @@ class TopicListView(ListView):
     def get_queryset(self):
         self.board = get_object_or_404(Board, pk=self.kwargs.get('pk'))
         queryset = self.board.topics.order_by('-last_updated').annotate(replies=Count('posts') - 1)
-        return queryset    
+        return queryset
+
+class BoardCreateView(UserPassesTestMixin, CreateView):
+    model = Board
+    template_name = 'board_create.html'
+    fields = ('name', 'description')
+    success_url = reverse_lazy('home')
+    
+    def test_func(self):
+        return self.request.user.is_staff
 
 @login_required    
 def new_topic(request, pk):
@@ -92,7 +102,7 @@ class PostUpdateView(UpdateView):
     template_name = 'edit_post.html'
     pk_url_kwarg = 'post_pk'
     context_object_name = 'post'
-    success_url = reverse_lazy()
+    success_url = reverse_lazy('my_account')
 
     def get_queryset(self):
         queryset = super().get_queryset()
