@@ -9,6 +9,7 @@ urlpatterns = [
     path('', RedirectView.as_view(url='/boards/'), name='home'),
     path('boards/', include('boards.urls')),
     path('accounts/signup/', account_views.signup, name='signup'),
+    path('settings/account/', account_views.UserUpdateView.as_view(), name='my_account'),
     path('accounts/logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('accounts/login/', auth_views.LoginView.as_view(template_name="login.html"), name='login'),
     path('password/change/', auth_views.PasswordChangeView.as_view(template_name="password_change.html"), name='password_change'),

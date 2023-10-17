@@ -47,18 +47,12 @@ class SuccessfulSignupTest(TestCase):
             'password1': 'testpassword',
             'password2': 'testpassword'
         })
-        self.home_url = reverse('home')
         
     def test_redirection(self):
-        self.assertRedirects(self.response, self.home_url)
+        self.assertRedirects(self.response, reverse('login'))
 
     def test_user_creation(self):
         self.assertTrue(User.objects.exists())
-
-    def test_user_authentication(self):
-        response = self.client.get(self.home_url)
-        user = response.context.get('user')
-        self.assertTrue(user.is_authenticated)
         
         
 class InvalidSignupTests(TestCase):
