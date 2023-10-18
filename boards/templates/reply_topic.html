@@ -42,7 +42,13 @@
             </div>
         </div>
     {% endfor %}
+    
 {% endblock content %}
 
 
-
+{% block extra_js %}
+    <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+    <script>
+        var simplemde = new SimpleMDE();
+    </script>
+{% endblock extra_js %}
