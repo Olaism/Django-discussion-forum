@@ -59,7 +59,9 @@ class SuccessfulReplyTopicTests(ReplyTopicTestCase):
         self.response = self.client.post(self.url, {"message": "My reply on your post"})
         
     def test_redirection(self):
-        topic_posts_url = reverse("topic_posts", kwargs={"pk": self.board.pk, "topic_pk": self.topic.pk})
+        post = Post.objects.last()
+        url = reverse("topic_posts", kwargs={"pk": self.board.pk, "topic_pk": self.topic.pk})
+        topic_posts_url = "{url}?page={page}#{id}".format(url=url, page=self.topic.get_page_count(), id=post.pk)
         self.assertRedirects(self.response, topic_posts_url)
 
     def test_post_created(self):

@@ -27,9 +27,21 @@
             </tr>
         </thead>
     {% for topic in topics %}
+        {% url 'topic_posts' pk=board.pk topic_pk=topic.pk as topic_url %}
         <tr>
             <td scope="row">
-                <a href="{{ topic.get_absolute_url }}">{{ topic.subject }}</a>
+                <p class="mb-0">
+                    <a href="{{ topic.get_absolute_url }}">{{ topic.subject }}</a>
+                </p>
+                <small class="text-muted">
+                    Pages:
+                    {% for i in topic.get_page_range %}
+                        <a href="{{ topic_url }}?page={{ i }}">{{ i }}</a>
+                    {% endfor %}
+                    {% if topic.has_many_pages %}
+                        <a href="{{ topic_url }}?page={{ topic.get_page_count }}">Last Page</a>
+                    {% endif %}
+                </small>
             </td>
             <td>{{ topic.starter.username }}</td>
             <td>{{ topic.replies }}</td>
