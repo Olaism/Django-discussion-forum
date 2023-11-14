@@ -1,20 +1,27 @@
+import uuid
 import math
 from django.db import models
 from django.urls import reverse
 from django.utils.html import mark_safe
-from django.utils.text import Truncator
+from django.utils.text import slugify, Truncator
 
 from markdown import markdown
 
 class Board(models.Model):
     name = models.CharField(max_length=30)
     description = models.CharField(max_length=100)
+    slug = models.SlugField(null=True, unique=True)
     
     def __str__(self):
         return self.name
         
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        return super().save(*args, **kwargs)
+        
     def get_absolute_url(self):
-        return reverse('board_topics', kwargs={'pk': self.pk})
+        return reverse('board_topics', kwargs={'slug': self.slug})
         
     def get_posts_count(self):
         return Post.objects.filter(topic__board=self).count()
@@ -23,6 +30,7 @@ class Board(models.Model):
         return Post.objects.filter(topic__board=self).order_by('-created_at').last()
     
 class Topic(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     subject = models.CharField(max_length=255)
     last_updated = models.DateTimeField(auto_now_add=True)
     board = models.ForeignKey(Board, on_delete=models.CASCADE, related_name='topics')
@@ -33,7 +41,7 @@ class Topic(models.Model):
         return f"{self.pk} - {self.subject}"
         
     def get_absolute_url(self):
-        return reverse('topic_posts', kwargs={'pk': self.board.pk, 'topic_pk': self.pk})
+        return reverse('topic_posts', kwargs={'slug': self.board.slug, 'topic_id': self.id})
         
     def get_page_count(self):
         count = self.posts.count()
@@ -56,6 +64,7 @@ class Topic(models.Model):
             
     
 class Post(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     message = models.TextField(max_length=4000)
     topic = models.ForeignKey(Topic, on_delete=models.CASCADE, related_name='posts')
     created_at = models.DateTimeField(auto_now_add=True)

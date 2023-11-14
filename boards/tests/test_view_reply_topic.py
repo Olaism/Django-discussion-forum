@@ -19,7 +19,7 @@ class ReplyTopicTestCase(TestCase):
         user = User.objects.create_user(username=self.username, email="", password=self.password)
         self.topic = Topic.objects.create(subject="all about django test", board=self.board, starter=user)
         Post.objects.create(message="my first post here", topic=self.topic, created_by=user)
-        self.url = reverse("reply_topic", kwargs={"pk": self.board.pk, "topic_pk": self.topic.pk})
+        self.url = reverse("reply_topic", kwargs={"slug": self.board.slug, "topic_id": self.topic.id})
         
 class LoginRequiredReplyTopicTests(ReplyTopicTestCase):
     def test_redirection(self):
@@ -37,7 +37,7 @@ class ReplyTopicTests(ReplyTopicTestCase):
         self.assertEquals(self.response.status_code, 200)
 
     def test_view_function(self):
-        view = resolve(f"/boards/{self.board.pk}/topics/{self.topic.pk}/reply/")
+        view = resolve(f"/boards/{self.board.slug}/topics/{self.topic.id}/reply/")
         self.assertEqual(view.func, reply_topic)
 
     def test_form(self):
@@ -60,8 +60,8 @@ class SuccessfulReplyTopicTests(ReplyTopicTestCase):
         
     def test_redirection(self):
         post = Post.objects.last()
-        url = reverse("topic_posts", kwargs={"pk": self.board.pk, "topic_pk": self.topic.pk})
-        topic_posts_url = "{url}?page={page}#{id}".format(url=url, page=self.topic.get_page_count(), id=post.pk)
+        url = reverse("topic_posts", kwargs={"slug": self.board.slug, "topic_id": self.topic.id})
+        topic_posts_url = "{url}?page={page}#{id}".format(url=url, page=self.topic.get_page_count(), id=post.id)
         self.assertRedirects(self.response, topic_posts_url)
 
     def test_post_created(self):

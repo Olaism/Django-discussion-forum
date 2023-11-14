@@ -21,9 +21,9 @@ class PostUpdateViewTestCase(TestCase):
         self.topic = Topic.objects.create(subject="testing in django", board=self.board, starter=self.user)
         self.post = Post.objects.create(message="Hello, test!", topic=self.topic, created_by=self.user)
         self.url = reverse('edit_post', kwargs={
-            'pk': self.board.pk,
-            'topic_pk': self.topic.pk,
-            'post_pk': self.post.pk
+            'slug': self.board.slug,
+            'topic_id': self.topic.id,
+            'post_id': self.post.id
         })
         
 class LoginRequiredPostUpdateViewTests(PostUpdateViewTestCase):
@@ -86,7 +86,7 @@ class SuccessfulPostUpdateViewTests(PostUpdateViewTestCase):
         self.response = self.client.post(self.url, {'message': 'updated message'})
         
     def test_redirection(self):
-        self.assertRedirects(self.response, reverse('topic_posts', kwargs={'pk': self.board.pk, 'topic_pk': self.topic.pk}))
+        self.assertRedirects(self.response, reverse('topic_posts', kwargs={'slug': self.board.slug, 'topic_id': self.topic.id}))
 
     def test_post_changed(self):
         self.post.refresh_from_db()

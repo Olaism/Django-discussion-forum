@@ -3,6 +3,7 @@ from django.forms import ModelForm
 from django.urls import reverse, resolve
 from django.test import TestCase
 
+from ..models import Board
 from ..views import BoardCreateView
 
 User = get_user_model()
@@ -63,21 +64,29 @@ class BoardCreateViewTests(BoardCreateTestCase):
 class SuccessfulBoardCreateViewTests(BoardCreateTestCase):
     
     def setUp(self):
-        pass
+        super().setUp()
+        self.client.login(username=self.username, password=self.password)
+        self.response = self.client.post(self.url, {'name': 'Django', 'description': 'A django description'})
 
     def test_redirection(self):
-        pass
+        self.assertEquals(self.response.status_code, 302)
 
     def test_board_creation(self):
-        pass
+        self.assertTrue(Board.objects.exists())
 
 class InvalidBoardCreateViewTests(BoardCreateTestCase):
 
     def setUp(self):
-        pass
+        super().setUp()
+        self.client.login(username=self.username, password=self.password)
+        self.response = self.client.post(self.url, {})
 
     def test_status_code(self):
-        pass
+        self.assertEquals(self.response.status_code, 200)
 
     def test_form_errors(self):
-        pass
+        form = self.response.context.get('form')
+        self.assertTrue(form.errors)
+        
+        
+        

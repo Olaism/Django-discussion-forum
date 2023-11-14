@@ -66,7 +66,7 @@ class SuccessfulPasswordChangeTests(TestCase):
         self.assertTrue(self.user.check_password("newtest_password"))
 
     def test_user_authentication(self):
-        response = self.client.get(reverse("home"))
+        response = self.client.get(reverse("board_home"))
         user = response.context.get("user")
         self.assertTrue(user.is_authenticated)
 

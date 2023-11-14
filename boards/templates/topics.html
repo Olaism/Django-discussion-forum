@@ -14,7 +14,7 @@
 
 {% block content %}
     <div class='mb-4'>
-        <a href="{% url 'new_topic' board.pk %}" class="btn btn-primary btn-sm">New Topic</a>
+        <a href="{% url 'new_topic' board.slug %}" class="btn btn-primary btn-sm">New Topic</a>
     </div>
     <table class="table">
         <thead>
@@ -27,7 +27,7 @@
             </tr>
         </thead>
     {% for topic in topics %}
-        {% url 'topic_posts' pk=board.pk topic_pk=topic.pk as topic_url %}
+        {% url 'topic_posts' slug=board.slug topic_id=topic.id as topic_url %}
         <tr>
             <td scope="row">
                 <p class="mb-0">

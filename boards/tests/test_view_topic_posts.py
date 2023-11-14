@@ -14,8 +14,8 @@ class TopicPostsViewTestCase(TestCase):
         user = User.objects.create_user(username="testuser", email="testuser@mail.com", password="testpassword")
         self.topic = Topic.objects.create(subject="test subject", board=self.board, starter=user)
         self.post = Post.objects.create(message="lorem ipsum dolor sit amet", topic=self.topic, created_by=user)
-        self.url = reverse('topic_posts', kwargs={"pk": self.board.pk, 'topic_pk': self.topic.pk})
-        self.edit_link = reverse('edit_post', kwargs={'pk': self.board.pk, 'topic_pk': self.topic.pk, 'post_pk': self.post.pk})
+        self.url = reverse('topic_posts', kwargs={"slug": self.board.slug, 'topic_id': self.topic.id})
+        self.edit_link = reverse('edit_post', kwargs={'slug': self.board.slug, 'topic_id': self.topic.id, 'post_id': self.post.id})
 
 
 class TopicPostsTests(TopicPostsViewTestCase):
@@ -28,11 +28,11 @@ class TopicPostsTests(TopicPostsViewTestCase):
         self.assertEquals(self.response.status_code, 200)
 
     def test_view_function(self):
-        view = resolve(f"/boards/{self.board.pk}/topics/{self.topic.pk}/")
+        view = resolve(f"/boards/{self.board.slug}/topics/{self.topic.id}/")
         self.assertEqual(view.func.view_class, PostListView)
         
     def test_view_contains_reply_link(self):
-        reply_url = reverse('reply_topic', kwargs={'pk': self.board.pk, 'topic_pk': self.topic.pk})
+        reply_url = reverse('reply_topic', kwargs={'slug': self.board.slug, 'topic_id': self.topic.id})
         self.assertContains(self.response, reply_url)
 
     def test_view_contains_edit_link(self):

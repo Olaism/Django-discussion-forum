@@ -11,10 +11,10 @@
         <a href="{% url 'home' %}">Boards</a>
     </li>
     <li class="breadcrumb-item">
-        <a href="{% url 'board_topics' topic.board.pk %}">{{ topic.board.name }}</a>
+        <a href="{% url 'board_topics' topic.board.slug %}">{{ topic.board.name }}</a>
     </li>
     <li class="breadcrumb-item">
-        <a href="{% url 'topic_posts' topic.board.pk topic.pk %}">{{ topic.subject }}</a>
+        <a href="{% url 'topic_posts' topic.board.slug topic.id %}">{{ topic.subject }}</a>
     </li>
     <li class="breadcrumb-item active">Post a reply</li>
 {% endblock breadcrumb %}

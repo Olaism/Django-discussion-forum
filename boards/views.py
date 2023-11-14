@@ -30,7 +30,7 @@ class TopicListView(ListView):
         return super().get_context_data(**kwargs)
 
     def get_queryset(self):
-        self.board = get_object_or_404(Board, pk=self.kwargs.get('pk'))
+        self.board = get_object_or_404(Board, slug=self.kwargs.get('slug'))
         queryset = self.board.topics.order_by('-last_updated').annotate(replies=Count('posts') - 1)
         return queryset
 
@@ -44,8 +44,8 @@ class BoardCreateView(UserPassesTestMixin, CreateView):
         return self.request.user.is_staff
 
 @login_required    
-def new_topic(request, pk):
-    board = get_object_or_404(Board, pk=pk)
+def new_topic(request, slug):
+    board = get_object_or_404(Board, slug=slug)
     if request.method == 'POST':
         form = NewTopicForm(request.POST)
         if form.is_valid():
@@ -58,7 +58,7 @@ def new_topic(request, pk):
                 topic = topic,
                 created_by = request.user
             )
-            return redirect('topic_posts', pk=pk, topic_pk=topic.pk)
+            return redirect('topic_posts', slug=slug, topic_id=topic.id)
     else:
         form = NewTopicForm()
     return render(request, 'new_topic.html', {'board': board, 'form': form})
@@ -79,13 +79,13 @@ class PostListView(ListView):
         return super().get_context_data(**kwargs)
 
     def get_queryset(self):
-        self.topic = get_object_or_404(Topic, board__pk=self.kwargs.get('pk'), pk=self.kwargs.get('topic_pk'))
+        self.topic = get_object_or_404(Topic, board__slug=self.kwargs.get('slug'), pk=self.kwargs.get('topic_id'))
         queryset = self.topic.posts.order_by('created_at')
         return queryset
 
 @login_required 
-def reply_topic(request, pk, topic_pk):
-    topic = get_object_or_404(Topic, board__pk=pk, pk=topic_pk)
+def reply_topic(request, slug, topic_id):
+    topic = get_object_or_404(Topic, board__slug=slug, id=topic_id)
     if request.method == "POST":
         form = PostForm(request.POST)
         if form.is_valid():
@@ -97,8 +97,8 @@ def reply_topic(request, pk, topic_pk):
             topic.last_updated = timezone.now()
             topic.save()
             
-            topic_url = reverse("topic_posts", kwargs={"pk": pk, "topic_pk": topic_pk})
-            topic_post_url = "{url}?page={page}#{id}".format(url=topic_url, page=topic.get_page_count(), id=post.pk)
+            topic_url = reverse("topic_posts", kwargs={"slug": slug, "topic_id": topic_id})
+            topic_post_url = "{url}?page={page}#{id}".format(url=topic_url, page=topic.get_page_count(), id=post.id)
             
             return redirect(topic_post_url)
     else:
@@ -110,7 +110,7 @@ class PostUpdateView(UpdateView):
     model = Post
     fields = ('message',)
     template_name = 'edit_post.html'
-    pk_url_kwarg = 'post_pk'
+    pk_url_kwarg = 'post_id'
     context_object_name = 'post'
     success_url = reverse_lazy('my_account')
 
@@ -123,7 +123,7 @@ class PostUpdateView(UpdateView):
         post.updated_by = self.request.user
         post.updated_at = timezone.now()
         post.save()
-        return redirect("topic_posts", pk=post.topic.board.pk, topic_pk=post.topic.pk)
+        return redirect("topic_posts", slug=post.topic.board.slug, topic_id=post.topic.id)
 
 
     
