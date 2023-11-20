@@ -8,6 +8,7 @@ from accounts import views as account_views
 urlpatterns = [
     path('', RedirectView.as_view(url='/boards/'), name='home'),
     path('boards/', include('boards.urls')),
+    path('api/', include('boards.api.urls')),
     path('accounts/signup/', account_views.signup, name='signup'),
     path('settings/account/', account_views.UserUpdateView.as_view(), name='my_account'),
     path('accounts/logout/', auth_views.LogoutView.as_view(), name='logout'),

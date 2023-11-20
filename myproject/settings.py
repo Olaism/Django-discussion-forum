@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
+    'rest_framework',
     'widget_tweaks',
     'boards.apps.BoardsConfig',
     'accounts.apps.AccountsConfig'
