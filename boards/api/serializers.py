@@ -5,7 +5,7 @@ from rest_framework.validators import UniqueTogetherValidator
 from boards.models import Board
 
 class BoardSerializer(serializers.ModelSerializer):
-    slug = serializers.SlugField(allow_blank=True)
+    slug = serializers.SlugField(allow_blank=True, read_only=True)
     
     class Meta:
         model = Board
@@ -16,6 +16,10 @@ class BoardSerializer(serializers.ModelSerializer):
                 fields=("name",)
             )
         ]
+        
+    def update(self, instance, validated_data):
+        instance.slug = slugify(validated_data.get('name'))
+        return super().update(instance, validated_data)
         
 
 
